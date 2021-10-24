@@ -89,8 +89,6 @@ docker run \
 --name smarttracker-app \
 --rm \
 -p 8383:8383 \
--p 3083:3083 \
--p 52083:52083 \
 -e SPRING_REDIS_HOST=host.docker.internal \
 -e SPRING_REDIS_PORT=26379 \
 -e MQTT_BROKER_HOST=host.docker.internal \
