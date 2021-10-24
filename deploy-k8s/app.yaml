@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: smarttracker-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: smarttracker-app
+  template:
+    metadata:
+      labels:
+        app: smarttracker-app
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/app-id: "smarttracker-app-id"
+        dapr.io/app-port: "8383"
+        dapr.io/config: "dapr-cp-config"
+    spec:
+      containers:
+        - name: smarttracker-app
+          image: com.hha/smarttracker:latest
+          ports:
+            - containerPort: 8383
+          env:
+            - name: SPRING_REDIS_HOST
+              value: host.minikube.internal
+            - name: SPRING_REDIS_PORT
+              value: '26379'
+            - name: MQTT_BROKER_HOST
+              value: host.minikube.internal
+            - name: MQTT_BROKER_PORT
+              value: '1883'
+            - name: TZ
+              value: Europe/Berlin
+          imagePullPolicy: Never
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: smarttracker-app
+spec:
+  selector:
+    app: smarttracker-app
+  ports:
+    - port: 80
+      targetPort: 8383
+  type: LoadBalancer

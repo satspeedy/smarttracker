@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  redis-store:
+    image: redis:alpine
+    hostname: smarttracker-store
+    container_name: smarttracker-store
+    environment:
+      - TZ=Europe/Berlin
+    ports:
+      - "26379:6379"
+
+  mosquitto-mqtt-broker:
+      image: eclipse-mosquitto:2.0.12
+      hostname: smarttracker-mqtt-broker
+      container_name: smarttracker-mqtt-broker
+      environment:
+        - TZ=Europe/Berlin
+      ports:
+        - "9001:9001"
+        - "1883:1883"
+      volumes:
+        - type: bind
+          source: ./../mqtt-broker-configuration/mosquitto.conf
+          target: /mosquitto/config/mosquitto.conf

@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+
+  app:
+    image: 'com.hha/smarttracker:latest'
+    build:
+      context: ""
+    container_name: 'smarttracker-app'
+    depends_on:
+      - mosquitto-mqtt-broker
+      - redis-store
+    links:
+      - mosquitto-mqtt-broker
+      - redis-store
+    environment:
+      # Exceptionally the internal port 6379 is passed as env param because docker compose uses the internal port to interact. From outside the port 26379 is used.
+      - SPRING_REDIS_HOST=redis-store
+      - SPRING_REDIS_PORT=6379
+      - MQTT_BROKER_HOST=mosquitto-mqtt-broker
+      - MQTT_BROKER_PORT=1883
+      - TZ=Europe/Berlin
+      - DAPR_HTTP_PORT=3083
+      - DAPR_GRPC_PORT=52083
+      - DAPR_TRUST_ANCHORS=${DAPR_TRUST_ANCHORS}
+      - DAPR_CERT_CHAIN=${DAPR_CERT_CHAIN}
+      - DAPR_CERT_KEY=${DAPR_CERT_KEY}
+      - AZURE_CLIENT_ID=${AZURE_CLIENT_ID}
+      - AZURE_CLIENT_SECRET=${AZURE_CLIENT_SECRET}
+      - AZURE_TENANT_ID=${AZURE_TENANT_ID}
+      - AZURE_VAULT_URL=${AZURE_VAULT_URL}
+      - NAMESPACE=default
+    ports:
+      - '8383:8383'
+      - '3083:3083'
+      - '52083:52083'
+
+  redis-store:
+    image: 'redis:alpine'
+    container_name: 'smarttracker-store'
+    depends_on:
+      - mosquitto-mqtt-broker
+    environment:
+      - TZ=Europe/Berlin
+    ports:
+      - '26379:6379'
+#    volumes:
+#      - /docker/host/dir:/data
+
+  mosquitto-mqtt-broker:
+    image: eclipse-mosquitto:2.0.12
+    hostname: smarttracker-mqtt-broker
+    container_name: smarttracker-mqtt-broker
+    environment:
+      - TZ=Europe/Berlin
+    ports:
+      - "9001:9001"
+      - "1883:1883"
+    volumes:
+      - type: bind
+        source: ./mqtt-broker-configuration/mosquitto.conf
+        target: /mosquitto/config/mosquitto.conf

@@ -1,0 +1,539 @@
+{
+	"info": {
+		"_postman_id": "4f0eb672-05cd-4fb5-8554-b793630f0bd3",
+		"name": "smart-tracker",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Trackings",
+			"item": [
+				{
+					"name": "GET All Trackings",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{smarttracker-app-host}}:{{smarttracker-app-port}}/api/trackings?role={{smarttracker-role-admin}}",
+							"protocol": "http",
+							"host": [
+								"{{smarttracker-app-host}}"
+							],
+							"port": "{{smarttracker-app-port}}",
+							"path": [
+								"api",
+								"trackings"
+							],
+							"query": [
+								{
+									"key": "role",
+									"value": "{{smarttracker-role-admin}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CREATE a new Tracking",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// https://stackoverflow.com/questions/58571488/how-to-extract-a-particular-string-value-from-response-header-in-postman\r",
+									"const responseHeaderLocation = pm.response.headers.get(\"Location\").split(\"/api/trackings/\")[1];\r",
+									"console.info(responseHeaderLocation);\r",
+									"pm.collectionVariables.set(\"smarttracker-created-tracking-number\", responseHeaderLocation);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"pin\": \"{{smarttracker-tracking-pin}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{smarttracker-app-host}}:{{smarttracker-app-port}}/api/trackings",
+							"protocol": "http",
+							"host": [
+								"{{smarttracker-app-host}}"
+							],
+							"port": "{{smarttracker-app-port}}",
+							"path": [
+								"api",
+								"trackings"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET A Tracking by trackingNumber",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{smarttracker-app-host}}:{{smarttracker-app-port}}/api/trackings/{{smarttracker-created-tracking-number}}?pin={{smarttracker-tracking-pin}}",
+							"protocol": "http",
+							"host": [
+								"{{smarttracker-app-host}}"
+							],
+							"port": "{{smarttracker-app-port}}",
+							"path": [
+								"api",
+								"trackings",
+								"{{smarttracker-created-tracking-number}}"
+							],
+							"query": [
+								{
+									"key": "pin",
+									"value": "{{smarttracker-tracking-pin}}"
+								},
+								{
+									"key": "",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PATCH (partial) a Tracking",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"trackingNumber\": {{smarttracker-created-tracking-number}},\r\n    \"currentPosition\": {\r\n        \"latitude\": \"{{$randomLatitude}}\",\r\n        \"longitude\": \"{{$randomLongitude}}\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{smarttracker-app-host}}:{{smarttracker-app-port}}/api/trackings/{{smarttracker-created-tracking-number}}?pin={{smarttracker-tracking-pin}}",
+							"protocol": "http",
+							"host": [
+								"{{smarttracker-app-host}}"
+							],
+							"port": "{{smarttracker-app-port}}",
+							"path": [
+								"api",
+								"trackings",
+								"{{smarttracker-created-tracking-number}}"
+							],
+							"query": [
+								{
+									"key": "pin",
+									"value": "{{smarttracker-tracking-pin}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UPDATE a Tracking by trackingNumber",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"trackingNumber\": {{smarttracker-created-tracking-number}},\r\n    \"pin\": {{smarttracker-tracking-pin}}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{smarttracker-app-host}}:{{smarttracker-app-port}}/api/trackings/{{smarttracker-created-tracking-number}}?pin={{smarttracker-tracking-pin}}",
+							"protocol": "http",
+							"host": [
+								"{{smarttracker-app-host}}"
+							],
+							"port": "{{smarttracker-app-port}}",
+							"path": [
+								"api",
+								"trackings",
+								"{{smarttracker-created-tracking-number}}"
+							],
+							"query": [
+								{
+									"key": "pin",
+									"value": "{{smarttracker-tracking-pin}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE a Tracking",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://{{smarttracker-app-host}}:{{smarttracker-app-port}}/api/trackings/{{smarttracker-created-tracking-number}}?pin={{smarttracker-tracking-pin}}",
+							"protocol": "http",
+							"host": [
+								"{{smarttracker-app-host}}"
+							],
+							"port": "{{smarttracker-app-port}}",
+							"path": [
+								"api",
+								"trackings",
+								"{{smarttracker-created-tracking-number}}"
+							],
+							"query": [
+								{
+									"key": "pin",
+									"value": "{{smarttracker-tracking-pin}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Trackings via Dapr Sidecar",
+			"item": [
+				{
+					"name": "GET All Trackings",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{rentadrone-app-host}}:{{rentadrone-dapr-http-port}}/v1.0/invoke/smarttracker-app-id/method/api/trackings?role={{smarttracker-role-admin}}",
+							"protocol": "http",
+							"host": [
+								"{{rentadrone-app-host}}"
+							],
+							"port": "{{rentadrone-dapr-http-port}}",
+							"path": [
+								"v1.0",
+								"invoke",
+								"smarttracker-app-id",
+								"method",
+								"api",
+								"trackings"
+							],
+							"query": [
+								{
+									"key": "role",
+									"value": "{{smarttracker-role-admin}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CREATE a new Tracking",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// https://stackoverflow.com/questions/58571488/how-to-extract-a-particular-string-value-from-response-header-in-postman\r",
+									"const responseHeaderLocation = pm.response.headers.get(\"Location\").split(\"/api/trackings/\")[1];\r",
+									"console.info(responseHeaderLocation);\r",
+									"pm.collectionVariables.set(\"smarttracker-created-tracking-number\", responseHeaderLocation);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"pin\": \"{{smarttracker-tracking-pin}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{rentadrone-app-host}}:{{rentadrone-dapr-http-port}}/v1.0/invoke/smarttracker-app-id/method/api/trackings",
+							"protocol": "http",
+							"host": [
+								"{{rentadrone-app-host}}"
+							],
+							"port": "{{rentadrone-dapr-http-port}}",
+							"path": [
+								"v1.0",
+								"invoke",
+								"smarttracker-app-id",
+								"method",
+								"api",
+								"trackings"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET A Tracking by trackingNumber",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{rentadrone-app-host}}:{{rentadrone-dapr-http-port}}/v1.0/invoke/smarttracker-app-id/method/api/trackings/{{smarttracker-created-tracking-number}}?pin={{smarttracker-tracking-pin}}",
+							"protocol": "http",
+							"host": [
+								"{{rentadrone-app-host}}"
+							],
+							"port": "{{rentadrone-dapr-http-port}}",
+							"path": [
+								"v1.0",
+								"invoke",
+								"smarttracker-app-id",
+								"method",
+								"api",
+								"trackings",
+								"{{smarttracker-created-tracking-number}}"
+							],
+							"query": [
+								{
+									"key": "pin",
+									"value": "{{smarttracker-tracking-pin}}"
+								},
+								{
+									"key": "",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PATCH (partial) a Tracking",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"trackingNumber\": {{smarttracker-created-tracking-number}},\r\n    \"currentPosition\": {\r\n        \"latitude\": \"{{$randomLatitude}}\",\r\n        \"longitude\": \"{{$randomLongitude}}\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{rentadrone-app-host}}:{{rentadrone-dapr-http-port}}/v1.0/invoke/smarttracker-app-id/method/api/trackings/{{smarttracker-created-tracking-number}}?pin={{smarttracker-tracking-pin}}",
+							"protocol": "http",
+							"host": [
+								"{{rentadrone-app-host}}"
+							],
+							"port": "{{rentadrone-dapr-http-port}}",
+							"path": [
+								"v1.0",
+								"invoke",
+								"smarttracker-app-id",
+								"method",
+								"api",
+								"trackings",
+								"{{smarttracker-created-tracking-number}}"
+							],
+							"query": [
+								{
+									"key": "pin",
+									"value": "{{smarttracker-tracking-pin}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UPDATE a Tracking by trackingNumber",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"trackingNumber\": {{smarttracker-created-tracking-number}},\r\n    \"pin\": {{smarttracker-tracking-pin}}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{rentadrone-app-host}}:{{rentadrone-dapr-http-port}}/v1.0/invoke/smarttracker-app-id/method/api/trackings/{{smarttracker-created-tracking-number}}?pin={{smarttracker-tracking-pin}}",
+							"protocol": "http",
+							"host": [
+								"{{rentadrone-app-host}}"
+							],
+							"port": "{{rentadrone-dapr-http-port}}",
+							"path": [
+								"v1.0",
+								"invoke",
+								"smarttracker-app-id",
+								"method",
+								"api",
+								"trackings",
+								"{{smarttracker-created-tracking-number}}"
+							],
+							"query": [
+								{
+									"key": "pin",
+									"value": "{{smarttracker-tracking-pin}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE a Tracking",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://{{rentadrone-app-host}}:{{rentadrone-dapr-http-port}}/v1.0/invoke/smarttracker-app-id/method/api/trackings/{{smarttracker-created-tracking-number}}?pin={{smarttracker-tracking-pin}}",
+							"protocol": "http",
+							"host": [
+								"{{rentadrone-app-host}}"
+							],
+							"port": "{{rentadrone-dapr-http-port}}",
+							"path": [
+								"v1.0",
+								"invoke",
+								"smarttracker-app-id",
+								"method",
+								"api",
+								"trackings",
+								"{{smarttracker-created-tracking-number}}"
+							],
+							"query": [
+								{
+									"key": "pin",
+									"value": "{{smarttracker-tracking-pin}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "smarttracker-app-host",
+			"value": "127.0.0.1"
+		},
+		{
+			"key": "smarttracker-app-port",
+			"value": "8383"
+		},
+		{
+			"key": "smarttracker-tracking-pin",
+			"value": "5555"
+		},
+		{
+			"key": "smarttracker-created-tracking-number",
+			"value": ""
+		},
+		{
+			"key": "smarttracker-role-admin",
+			"value": "admin"
+		},
+		{
+			"key": "rentadrone-app-host",
+			"value": "127.0.0.1"
+		},
+		{
+			"key": "rentadrone-dapr-http-port",
+			"value": "3081"
+		}
+	]
+}
