@@ -32,8 +32,6 @@ services:
       - NAMESPACE=default
     ports:
       - '8383:8383'
-      - '3083:3083'
-      - '52083:52083'
 
   redis-store:
     image: 'redis:alpine'
